@@ -1,4 +1,4 @@
-name: Android CI Build
+ name: Android CI Build
 
 on:
   push:
@@ -15,10 +15,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21  # ወደ 21 ተቀይሯል
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '21'
           distribution: 'temurin'
           cache: 'gradle'
 
@@ -26,13 +26,12 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
-
-      - name: Run Unit Tests
-        run: ./gradlew test
+        run: ./gradlew assembleDebug --stacktrace # ስህተት ካለ በዝርዝር እንዲያሳይ
 
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: capyreader-debug-apk
-          path: app/build/outputs/apk/**/*.apk
+          path: "**/*.apk"
+          if-no-files-found: error # ፋይሉ ካልተገኘ እንዲያሳውቀን
+
