@@ -1,0 +1,38 @@
+name: Android CI Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: [actions/checkout@v4](https://github.com)
+
+      - name: Set up JDK 17
+        uses: [actions/setup-java@v4](https://github.com)
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: Grant Execute Permission for Gradlew
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Run Unit Tests
+        run: ./gradlew test
+
+      - name: Upload Debug APK Artifact
+        uses: [actions/upload-artifact@v4](https://github.com)
+        with:
+          name: capyreader-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
