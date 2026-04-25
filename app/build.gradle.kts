@@ -27,7 +27,7 @@ android {
 
     defaultConfig {
         applicationId = "com.capyreader.app"
-        minSdk = 30
+        minSdk = 27
         targetSdk = 36
         versionCode = 1207
         versionName = "2026.04.1207"
